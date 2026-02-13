@@ -20,6 +20,8 @@
 
 ### 🐳 Docker環境（推奨）
 
+#### バックエンド起動
+
 ```bash
 cd backend
 
@@ -30,7 +32,7 @@ docker compose up -d
 docker compose logs -f app
 ```
 
-サーバーは `http://localhost:8080` で起動します。
+バックエンドAPIは `http://localhost:8080` で起動します。
 
 ```bash
 # コンテナ停止
@@ -39,6 +41,20 @@ docker compose down
 # コンテナ停止 + ボリューム削除（データベースリセット）
 docker compose down -v
 ```
+
+#### フロントエンド起動
+
+```bash
+cd frontend
+
+# 依存関係インストール
+npm install
+
+# 開発サーバー起動
+npm run dev
+```
+
+フロントエンドは `http://localhost:5173` で起動します。
 
 ### 💻 ローカル環境
 
@@ -58,14 +74,11 @@ cd backend
 # データベースのセットアップ
 diesel setup
 
-# マイグレーション実行
+# マイグレーション実行（スキーマファイルも自動生成されます）
 diesel migration run
 
-# スキーマファイル生成（ドメインごとに分離）
-./scripts/generate-schemas.sh
-
-# アプリケーション起動
-cargo run
+# アプリケーション起動（ログ出力有効化）
+RUST_LOG=info cargo run
 ```
 
 サーバーは `http://localhost:8080` で起動します。
@@ -76,18 +89,10 @@ cargo run
 
 設定ファイル: [backend/diesel.toml](backend/diesel.toml)
 
-スキーマ生成:
-```bash
-# 全ドメイン一括生成
-./scripts/generate-schemas.sh
-
-# 個別生成
-diesel print-schema --schema-key division
-diesel print-schema --schema-key user
-diesel print-schema --schema-key book
-```
-
-設定ファイル: [backend/diesel.toml](backend/diesel.toml)
+スキーマファイルは `diesel migration run` や `diesel database reset` の実行時に自動生成されます。
+- `db_domain/division/src/schema.rs` - divisionsテーブル
+- `db_domain/user/src/schema.rs` - usersテーブル
+- `db_domain/book/src/schema.rs` - booksテーブル
 
 ---
 
@@ -105,7 +110,9 @@ diesel print-schema --schema-key book
 
 ```
 POST   /divisions          # 部署作成
+GET    /divisions          # 部署一覧取得
 POST   /users              # ユーザー作成
+GET    /users              # ユーザー一覧取得
 POST   /books              # 書籍登録
 GET    /books              # 書籍一覧取得
 GET    /books/{id}         # 書籍詳細取得
@@ -176,32 +183,74 @@ CREATE TABLE books (
      └──────────────────────────────┘
 ```
 
+### 技術スタック
+
+#### バックエンド
+- **言語**: Rust (edition 2021)
+- **Webフレームワーク**: Actix-Web 4
+- **ORM**: Diesel 2 (PostgreSQL)
+- **DB**: PostgreSQL
+- **その他**:
+  - r2d2 (コネクションプール)
+  - chrono (日時処理)
+  - serde/serde_json (JSON シリアライゼーション)
+  - env_logger (ログ出力)
+  - dotenv (環境変数)
+
+#### フロントエンド
+- **言語**: TypeScript
+- **フレームワーク**: React 18
+- **ビルドツール**: Vite
+- **スタイリング**: Tailwind CSS 3
+- **HTTP クライアント**: axios
+- **状態管理**: TanStack Query (React Query) v5
+- **ルーティング**: React Router v6
+
 ---
 
 ## 📁 ディレクトリ構造
 
 ```
-backend/
-├── domain/                      # ドメイン層
-│   ├── context/                # コンテキスト定義（PgConn, TxContext等）
-│   ├── value_object/<ctx>/     # 値オブジェクト（ID、検証済みプリミティブ）
-│   ├── entity_object/<ctx>/    # エンティティ
-│   └── collection_object/<ctx>/ # コレクション
+sandbox-office-library-system/
+├── backend/                     # バックエンド
+│   ├── domain/                  # ドメイン層
+│   │   ├── context/            # コンテキスト定義（PgConn, TxContext等）
+│   │   ├── value_object/<ctx>/ # 値オブジェクト（ID、検証済みプリミティブ）
+│   │   ├── entity_object/<ctx>/ # エンティティ
+│   │   └── collection_object/<ctx>/ # コレクション
+│   │
+│   ├── presenter/<ctx>/        # プレゼンター層（JSON DTO）
+│   ├── db_domain/<ctx>/        # DB層（Diesel schema + models）
+│   │
+│   ├── repository/<ctx>/       # リポジトリトレイト定義
+│   ├── repository_impl/<ctx>/  # リポジトリ実装（Diesel）
+│   │
+│   ├── feature/<ctx>/          # フィーチャー層（ビジネスロジック）
+│   ├── usecase/<ctx>/          # ユースケース層
+│   │
+│   ├── controller/<ctx>/       # コントローラー層
+│   ├── controller_utils/       # コントローラー共通ユーティリティ
+│   │
+│   ├── di_service/             # 依存性注入サービス
+│   └── app/                    # アプリケーションエントリポイント
 │
-├── presenter/<ctx>/            # プレゼンター層（JSON DTO）
-├── db_domain/<ctx>/            # DB層（Diesel schema + models）
-│
-├── repository/<ctx>/           # リポジトリトレイト定義
-├── repository_impl/<ctx>/      # リポジトリ実装（Diesel）
-│
-├── feature/<ctx>/              # フィーチャー層（ビジネスロジック）
-├── usecase/<ctx>/              # ユースケース層
-│
-├── controller/<ctx>/           # コントローラー層
-├── controller/utils/           # コントローラー共通ユーティリティ
-│
-├── di_service/                 # 依存性注入サービス
-└── app/                        # アプリケーションエントリポイント
+└── frontend/                    # フロントエンド（React + TypeScript）
+    ├── src/
+    │   ├── components/         # 共通コンポーネント
+    │   │   └── PageHeader.tsx  # ページヘッダー
+    │   ├── lib/
+    │   │   └── api.ts          # API クライアント（axios）
+    │   ├── pages/              # ページコンポーネント
+    │   │   ├── Books.tsx       # 書籍管理（一覧・登録・貸出・返却）
+    │   │   ├── Divisions.tsx   # 部署管理（一覧・登録）
+    │   │   └── Users.tsx       # ユーザー管理（一覧・登録）
+    │   ├── App.tsx             # メインアプリ（ルーティング）
+    │   ├── main.tsx            # エントリポイント
+    │   └── index.css           # グローバルスタイル（Tailwind CSS）
+    ├── .env                    # 環境設定
+    ├── package.json            # 依存関係
+    ├── vite.config.ts          # Vite設定
+    └── tailwind.config.js      # Tailwind CSS設定
 ```
 
 `<ctx>` = `{division, user, book}` の各ドメインコンテキスト
@@ -499,6 +548,8 @@ pub fn build_book_usecase() -> BookUsecaseImpl {
 
 ## 🛠️ 技術スタック
 
+### バックエンド
+
 | カテゴリ | 技術 |
 |---------|------|
 | **言語** | Rust (Edition 2021) |
@@ -507,6 +558,18 @@ pub fn build_book_usecase() -> BookUsecaseImpl {
 | **データベース** | PostgreSQL |
 | **接続プール** | r2d2 |
 | **インフラ** | Docker, Docker Compose |
+
+### フロントエンド
+
+| カテゴリ | 技術 |
+|---------|------|
+| **言語** | TypeScript |
+| **フレームワーク** | React 18 |
+| **ビルドツール** | Vite |
+| **スタイリング** | Tailwind CSS |
+| **データフェッチ** | TanStack Query (React Query) |
+| **ルーティング** | React Router v6 |
+| **HTTPクライアント** | Axios |
 
 ---
 

@@ -1,0 +1,12 @@
+target/
+.env
+*.swp
+*.swo
+*~
+.DS_Store
+.git/
+.gitignore
+README.md
+scripts/
+diesel.toml
+migrations/

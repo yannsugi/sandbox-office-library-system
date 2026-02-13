@@ -1,0 +1,24 @@
+# Diesel CLI configuration
+# This file uses subschema feature to generate separate schema.rs files for each domain
+
+[print_schema]
+# Default configuration (not used directly, but serves as template)
+file = "src/schema.rs"
+
+# Division domain schema
+[print_schema.division]
+file = "db_domain/division/src/schema.rs"
+filter = { only_tables = ["divisions"] }
+with_docs = true
+
+# User domain schema
+[print_schema.user]
+file = "db_domain/user/src/schema.rs"
+filter = { only_tables = ["users"] }
+with_docs = true
+
+# Book domain schema
+[print_schema.book]
+file = "db_domain/book/src/schema.rs"
+filter = { only_tables = ["books"] }
+with_docs = true

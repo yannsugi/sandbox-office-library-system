@@ -1,0 +1,9 @@
+[package]
+name = "value_object_book"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = { workspace = true }
+value_object_division = { workspace = true }
+value_object_user = { workspace = true }

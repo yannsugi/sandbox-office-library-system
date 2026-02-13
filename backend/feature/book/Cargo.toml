@@ -1,0 +1,15 @@
+[package]
+name = "feature_book"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+repository_book = { workspace = true }
+repository_user = { workspace = true }
+entity_object_book = { workspace = true }
+entity_object_user = { workspace = true }
+collection_object_book = { workspace = true }
+value_object_book = { workspace = true }
+value_object_division = { workspace = true }
+value_object_user = { workspace = true }
+anyhow = { workspace = true }

@@ -1,0 +1,9 @@
+[package]
+name = "repository_division"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+entity_object_division = { workspace = true }
+value_object_division = { workspace = true }
+anyhow = { workspace = true }

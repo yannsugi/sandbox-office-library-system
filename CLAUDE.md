@@ -47,6 +47,7 @@ Keep it minimal (no loan history table).
 
 backend/
 - domain/
+  - context/                       # PgConn trait, AppContext, TxContext
   - value_object/<context>/
   - entity_object/<context>/
   - collection_object/<context>/
@@ -126,27 +127,32 @@ db_domain must not depend on domain.
 Define repository traits per context, generic over Ctx, passing `&mut Ctx`.
 Do NOT mention PgConnection here.
 
-Examples (concepts):
+Organize repository traits into CRUD (max 4 traits):
+- RepoCreate<Ctx>
+- RepoRead<Ctx>
+- RepoUpdate<Ctx>
+- RepoDelete<Ctx>
+
+Examples:
 Division:
-- DivisionRepoInsert<Ctx>::create_division
-- DivisionRepoSelect<Ctx>::find_division
+- DivisionRepoCreate<Ctx>::create_division
+- DivisionRepoRead<Ctx>::find_division
 
 User:
-- UserRepoInsert<Ctx>::create_user
-- UserRepoSelect<Ctx>::find_user
+- UserRepoCreate<Ctx>::create_user
+- UserRepoRead<Ctx>::find_user
 
 Book:
-- BookRepoInsert<Ctx>::create_book
-- BookRepoSelect<Ctx>::find_book
-- BookRepoList<Ctx>::list_books
-- BookRepoBorrow<Ctx>::borrow_book
-- BookRepoReturn<Ctx>::return_book
+- BookRepoCreate<Ctx>::create_book
+- BookRepoRead<Ctx>::find_book, list_books
+- BookRepoUpdate<Ctx>::borrow_book, return_book
 
 ---
 
 ## 🏗 RepositoryImpl (Diesel only here)
-For each context, create RepoImpl struct(s) and implement repository traits for `PgConnection`:
-- `impl Trait<PgConnection> for RepoImpl`
+For each context, create RepoImpl struct(s) and implement repository traits with `where Ctx: PgConn`:
+- `impl<Ctx> Trait<Ctx> for RepoImpl where Ctx: PgConn`
+- Use `ctx.conn()` to get `&mut PgConnection`
 
 RepositoryImpl responsibilities:
 - Diesel queries using PgConnection
@@ -197,7 +203,13 @@ Controllers:
 Create a shared helper used by all controllers:
 - acquire PgConnection from pool
 - conn.transaction(|tx_conn| { ... })
-- call usecases with `tx_conn` as `&mut Ctx`
+- Create TxContext with AppContext + tx_conn
+- call usecases with `&mut TxContext` as `&mut Ctx`
+
+Use unified `executor` pattern to support various parameter patterns:
+- `executor(&ctx, (), |conn, _| { ... })` - no params
+- `executor(&ctx, req, |conn, req| { ... })` - single param
+- `executor(&ctx, (*path, req), |conn, (path, req)| { ... })` - tuple params
 
 No other layer starts transactions.
 

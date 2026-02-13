@@ -1,0 +1,16 @@
+[package]
+name = "app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+controller_division = { workspace = true }
+controller_user = { workspace = true }
+controller_book = { workspace = true }
+domain_context = { workspace = true }
+di_service = { workspace = true }
+actix-web = { workspace = true }
+actix-rt = { workspace = true }
+diesel = { workspace = true }
+r2d2 = { workspace = true }
+dotenv = { workspace = true }

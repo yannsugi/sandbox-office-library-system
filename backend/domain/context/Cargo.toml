@@ -1,0 +1,8 @@
+[package]
+name = "domain_context"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+diesel = { workspace = true }
+r2d2 = { workspace = true }

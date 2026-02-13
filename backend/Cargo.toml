@@ -1,0 +1,140 @@
+[workspace]
+resolver = "2"
+
+members = [
+    # Domain layer - value_object
+    "domain/value_object/division",
+    "domain/value_object/user",
+    "domain/value_object/book",
+
+    # Domain layer - entity_object
+    "domain/entity_object/division",
+    "domain/entity_object/user",
+    "domain/entity_object/book",
+
+    # Domain layer - collection_object
+    "domain/collection_object/division",
+    "domain/collection_object/user",
+    "domain/collection_object/book",
+
+    # Domain layer - context
+    "domain/context",
+
+    # Presenter layer
+    "presenter/division",
+    "presenter/user",
+    "presenter/book",
+
+    # db_domain layer
+    "db_domain/division",
+    "db_domain/user",
+    "db_domain/book",
+
+    # Repository layer (traits only)
+    "repository/division",
+    "repository/user",
+    "repository/book",
+
+    # RepositoryImpl layer (Diesel)
+    "repository_impl/division",
+    "repository_impl/user",
+    "repository_impl/book",
+
+    # Feature layer
+    "feature/division",
+    "feature/user",
+    "feature/book",
+
+    # Usecase layer
+    "usecase/division",
+    "usecase/user",
+    "usecase/book",
+
+    # Controller layer
+    "controller/division",
+    "controller/user",
+    "controller/book",
+    "controller/utils",
+
+    # DI and App
+    "di_service",
+    "app",
+]
+
+[workspace.dependencies]
+# Web framework
+actix-web = "4"
+actix-rt = "2"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+diesel = { version = "2", features = ["postgres", "r2d2", "chrono"] }
+r2d2 = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Env
+dotenv = "0.15"
+
+# Internal crates - domain/value_object
+value_object_division = { path = "domain/value_object/division" }
+value_object_user = { path = "domain/value_object/user" }
+value_object_book = { path = "domain/value_object/book" }
+
+# Internal crates - domain/entity_object
+entity_object_division = { path = "domain/entity_object/division" }
+entity_object_user = { path = "domain/entity_object/user" }
+entity_object_book = { path = "domain/entity_object/book" }
+
+# Internal crates - domain/collection_object
+collection_object_division = { path = "domain/collection_object/division" }
+collection_object_user = { path = "domain/collection_object/user" }
+collection_object_book = { path = "domain/collection_object/book" }
+
+# Internal crates - domain/context
+domain_context = { path = "domain/context" }
+
+# Internal crates - presenter
+presenter_division = { path = "presenter/division" }
+presenter_user = { path = "presenter/user" }
+presenter_book = { path = "presenter/book" }
+
+# Internal crates - db_domain
+db_domain_division = { path = "db_domain/division" }
+db_domain_user = { path = "db_domain/user" }
+db_domain_book = { path = "db_domain/book" }
+
+# Internal crates - repository
+repository_division = { path = "repository/division" }
+repository_user = { path = "repository/user" }
+repository_book = { path = "repository/book" }
+
+# Internal crates - repository_impl
+repository_impl_division = { path = "repository_impl/division" }
+repository_impl_user = { path = "repository_impl/user" }
+repository_impl_book = { path = "repository_impl/book" }
+
+# Internal crates - feature
+feature_division = { path = "feature/division" }
+feature_user = { path = "feature/user" }
+feature_book = { path = "feature/book" }
+
+# Internal crates - usecase
+usecase_division = { path = "usecase/division" }
+usecase_user = { path = "usecase/user" }
+usecase_book = { path = "usecase/book" }
+
+# Internal crates - controller
+controller_division = { path = "controller/division" }
+controller_user = { path = "controller/user" }
+controller_book = { path = "controller/book" }
+controller_utils = { path = "controller/utils" }
+
+# Internal crates - services
+di_service = { path = "di_service" }

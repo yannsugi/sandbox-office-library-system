@@ -1,0 +1,15 @@
+[package]
+name = "di_service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+repository_impl_division = { workspace = true }
+repository_impl_user = { workspace = true }
+repository_impl_book = { workspace = true }
+feature_division = { workspace = true }
+feature_user = { workspace = true }
+feature_book = { workspace = true }
+usecase_division = { workspace = true }
+usecase_user = { workspace = true }
+usecase_book = { workspace = true }

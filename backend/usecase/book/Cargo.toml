@@ -1,0 +1,15 @@
+[package]
+name = "usecase_book"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+feature_book = { workspace = true }
+feature_user = { workspace = true }
+entity_object_book = { workspace = true }
+collection_object_book = { workspace = true }
+value_object_book = { workspace = true }
+value_object_division = { workspace = true }
+value_object_user = { workspace = true }
+presenter_book = { workspace = true }
+anyhow = { workspace = true }

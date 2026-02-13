@@ -1,0 +1,8 @@
+[package]
+name = "collection_object_user"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+entity_object_user = { workspace = true }
+value_object_user = { workspace = true }

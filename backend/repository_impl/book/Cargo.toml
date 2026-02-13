@@ -1,0 +1,17 @@
+[package]
+name = "repository_impl_book"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+repository_book = { workspace = true }
+entity_object_book = { workspace = true }
+collection_object_book = { workspace = true }
+value_object_book = { workspace = true }
+value_object_division = { workspace = true }
+value_object_user = { workspace = true }
+db_domain_book = { workspace = true }
+domain_context = { workspace = true }
+diesel = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }

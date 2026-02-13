@@ -1,0 +1,10 @@
+[package]
+name = "feature_division"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+repository_division = { workspace = true }
+entity_object_division = { workspace = true }
+value_object_division = { workspace = true }
+anyhow = { workspace = true }

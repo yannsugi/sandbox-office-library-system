@@ -1,0 +1,8 @@
+[package]
+name = "collection_object_book"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+entity_object_book = { workspace = true }
+value_object_book = { workspace = true }

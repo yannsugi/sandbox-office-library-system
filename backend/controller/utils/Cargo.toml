@@ -1,0 +1,10 @@
+[package]
+name = "controller_utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain_context = { workspace = true }
+diesel = { workspace = true }
+actix-web = { workspace = true }
+anyhow = { workspace = true }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { usersApi, divisionsApi } from '../lib/api';
+import { PageHeader } from '../components/PageHeader';
 
 export function Users() {
   const queryClient = useQueryClient();
@@ -71,14 +72,10 @@ export function Users() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center mb-6">
-        <div className="sm:flex-auto">
-          <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Manage system users and their division assignments
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Users"
+        description="Manage system users and their division assignments"
+      />
 
       <div className="bg-white shadow-sm rounded-lg border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Add New User</h2>
@@ -146,9 +143,6 @@ export function Users() {
       <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
         {users.length === 0 ? (
           <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
             <h3 className="mt-2 text-sm font-medium text-gray-900">No users</h3>
             <p className="mt-1 text-sm text-gray-500">Get started by creating a new user.</p>
           </div>

@@ -1,4 +1,4 @@
-use feature_division::DivisionFeatureCreateDivision;
+use feature_division::{DivisionFeatureCreateDivision, DivisionFeatureListDivisions};
 use value_object_division::DivisionName;
 use presenter_division::{CreateDivisionRequestJdto, DivisionResponseJdto};
 use anyhow::Result;
@@ -29,5 +29,25 @@ where
             id: division.id().value(),
             name: division.name().value().to_string(),
         })
+    }
+}
+
+pub trait DivisionUsecaseListDivisions<Ctx> {
+    fn execute(&self, ctx: &mut Ctx) -> Result<Vec<DivisionResponseJdto>>;
+}
+
+impl<Ctx, DivFeature> DivisionUsecaseListDivisions<Ctx> for DivisionUsecaseService<DivFeature>
+where
+    DivFeature: DivisionFeatureListDivisions<Ctx>,
+{
+    fn execute(&self, ctx: &mut Ctx) -> Result<Vec<DivisionResponseJdto>> {
+        let divisions = self.division_feature.execute(ctx)?;
+
+        Ok(divisions.items().iter().map(|division| {
+            DivisionResponseJdto {
+                id: division.id().value(),
+                name: division.name().value().to_string(),
+            }
+        }).collect())
     }
 }

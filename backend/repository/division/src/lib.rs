@@ -1,4 +1,5 @@
 use entity_object_division::Division;
+use collection_object_division::Divisions;
 use value_object_division::{DivisionId, DivisionName};
 use anyhow::Result;
 
@@ -8,6 +9,7 @@ pub trait DivisionRepoCreate<Ctx> {
 
 pub trait DivisionRepoRead<Ctx> {
     fn find_division(&self, ctx: &mut Ctx, id: DivisionId) -> Result<Option<Division>>;
+    fn list_divisions(&self, ctx: &mut Ctx) -> Result<Divisions>;
 }
 
 pub trait DivisionRepoUpdate<Ctx> {

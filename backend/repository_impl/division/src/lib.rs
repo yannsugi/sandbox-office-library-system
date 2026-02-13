@@ -1,6 +1,7 @@
 use diesel::prelude::*;
 use repository_division::{DivisionRepoCreate, DivisionRepoRead};
 use entity_object_division::Division;
+use collection_object_division::Divisions;
 use value_object_division::{DivisionId, DivisionName};
 use db_domain_division::schema::divisions;
 use db_domain_division::models::{DivisionRow, NewDivisionRow};
@@ -55,5 +56,18 @@ where
             Some(row) => Ok(Some(Self::row_to_domain(row)?)),
             None => Ok(None),
         }
+    }
+
+    fn list_divisions(&self, ctx: &mut Ctx) -> Result<Divisions> {
+        let rows: Vec<DivisionRow> = divisions::table
+            .select(DivisionRow::as_select())
+            .load(ctx.conn())?;
+
+        let divisions: Result<Vec<Division>> = rows
+            .into_iter()
+            .map(Self::row_to_domain)
+            .collect();
+
+        Ok(Divisions::new(divisions?))
     }
 }

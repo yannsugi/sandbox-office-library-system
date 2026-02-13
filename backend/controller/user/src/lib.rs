@@ -25,3 +25,6 @@ impl ResponseError for UserControllerError {
 
 pub mod create;
 pub use create::create;
+
+pub mod list;
+pub use list::list;

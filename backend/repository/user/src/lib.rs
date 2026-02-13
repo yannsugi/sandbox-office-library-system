@@ -1,4 +1,5 @@
 use entity_object_user::User;
+use collection_object_user::Users;
 use value_object_user::{UserId, UserName};
 use value_object_division::DivisionId;
 use anyhow::Result;
@@ -9,6 +10,7 @@ pub trait UserRepoCreate<Ctx> {
 
 pub trait UserRepoRead<Ctx> {
     fn find_user(&self, ctx: &mut Ctx, id: UserId) -> Result<Option<User>>;
+    fn list_users(&self, ctx: &mut Ctx) -> Result<Users>;
 }
 
 pub trait UserRepoUpdate<Ctx> {

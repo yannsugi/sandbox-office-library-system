@@ -1,4 +1,4 @@
-use feature_user::UserFeatureCreateUser;
+use feature_user::{UserFeatureCreateUser, UserFeatureListUsers};
 use value_object_user::UserName;
 use value_object_division::DivisionId;
 use presenter_user::{CreateUserRequestJdto, UserResponseJdto};
@@ -32,5 +32,26 @@ where
             name: user.name().value().to_string(),
             division_id: user.division_id().value(),
         })
+    }
+}
+
+pub trait UserUsecaseListUsers<Ctx> {
+    fn execute(&self, ctx: &mut Ctx) -> Result<Vec<UserResponseJdto>>;
+}
+
+impl<Ctx, UserFeature> UserUsecaseListUsers<Ctx> for UserUsecaseService<UserFeature>
+where
+    UserFeature: UserFeatureListUsers<Ctx>,
+{
+    fn execute(&self, ctx: &mut Ctx) -> Result<Vec<UserResponseJdto>> {
+        let users = self.user_feature.execute(ctx)?;
+
+        Ok(users.items().iter().map(|user| {
+            UserResponseJdto {
+                id: user.id().value(),
+                name: user.name().value().to_string(),
+                division_id: user.division_id().value(),
+            }
+        }).collect())
     }
 }

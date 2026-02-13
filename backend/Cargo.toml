@@ -65,6 +65,7 @@ members = [
 # Web framework
 actix-web = "4"
 actix-rt = "2"
+actix-cors = "0.7"
 
 # Serialization
 serde = { version = "1", features = ["derive"] }
@@ -78,6 +79,10 @@ chrono = { version = "0.4", features = ["serde"] }
 # Error handling
 anyhow = "1"
 thiserror = "1"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
 
 # Env
 dotenv = "0.15"

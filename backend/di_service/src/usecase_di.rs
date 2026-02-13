@@ -18,7 +18,15 @@ pub fn build_division_usecase() -> DivisionUsecase {
     DivisionUsecaseService::new(feature_di::build_division_feature_service())
 }
 
+pub fn build_division_usecase_list() -> DivisionUsecase {
+    DivisionUsecaseService::new(feature_di::build_division_feature_service())
+}
+
 pub fn build_user_usecase() -> UserUsecase {
+    UserUsecaseService::new(feature_di::build_user_feature_service())
+}
+
+pub fn build_user_usecase_list() -> UserUsecase {
     UserUsecaseService::new(feature_di::build_user_feature_service())
 }
 

@@ -1,5 +1,6 @@
-use repository_division::DivisionRepoCreate;
+use repository_division::{DivisionRepoCreate, DivisionRepoRead};
 use entity_object_division::Division;
+use collection_object_division::Divisions;
 use value_object_division::DivisionName;
 use anyhow::Result;
 
@@ -23,5 +24,18 @@ where
 {
     fn execute(&self, ctx: &mut Ctx, name: &DivisionName) -> Result<Division> {
         self.division_repo.create_division(ctx, name)
+    }
+}
+
+pub trait DivisionFeatureListDivisions<Ctx> {
+    fn execute(&self, ctx: &mut Ctx) -> Result<Divisions>;
+}
+
+impl<Ctx, DivRepo> DivisionFeatureListDivisions<Ctx> for DivisionFeatureService<DivRepo>
+where
+    DivRepo: DivisionRepoRead<Ctx>,
+{
+    fn execute(&self, ctx: &mut Ctx) -> Result<Divisions> {
+        self.division_repo.list_divisions(ctx)
     }
 }

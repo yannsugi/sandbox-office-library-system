@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 repository_user = { workspace = true }
 entity_object_user = { workspace = true }
+collection_object_user = { workspace = true }
 value_object_user = { workspace = true }
 value_object_division = { workspace = true }
 db_domain_user = { workspace = true }

@@ -1,6 +1,7 @@
 use diesel::prelude::*;
 use repository_user::{UserRepoCreate, UserRepoRead};
 use entity_object_user::User;
+use collection_object_user::Users;
 use value_object_user::{UserId, UserName};
 use value_object_division::DivisionId;
 use db_domain_user::schema::users;
@@ -58,5 +59,18 @@ where
             Some(row) => Ok(Some(Self::row_to_domain(row)?)),
             None => Ok(None),
         }
+    }
+
+    fn list_users(&self, ctx: &mut Ctx) -> Result<Users> {
+        let rows: Vec<UserRow> = users::table
+            .select(UserRow::as_select())
+            .load(ctx.conn())?;
+
+        let users: Result<Vec<User>> = rows
+            .into_iter()
+            .map(Self::row_to_domain)
+            .collect();
+
+        Ok(Users::new(users?))
     }
 }

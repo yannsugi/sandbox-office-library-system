@@ -14,3 +14,4 @@ di_service = { workspace = true }
 actix-web = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
+log = { workspace = true }

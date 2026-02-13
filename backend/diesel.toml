@@ -1,10 +1,6 @@
 # Diesel CLI configuration
 # This file uses subschema feature to generate separate schema.rs files for each domain
 
-[print_schema]
-# Default configuration (not used directly, but serves as template)
-file = "src/schema.rs"
-
 # Division domain schema
 [print_schema.division]
 file = "db_domain/division/src/schema.rs"
